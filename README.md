@@ -61,7 +61,8 @@ This is an experimental release, and not all Magic Leap device functionality is 
 
 ## Troubleshooting
 - Make sure that Zero Iteration is disconnected if you are trying to interact with the project in the Unity Editor Game window.
-- If you created a new Camera object, make sure it is tagged as the Main Camera.
+- If you created a new Camera object, make sure it is tagged as the Main Camera. 
+- If you are trying to port an existing Magic Leap Unity project to MRTK, remove the Magic Leap Main Camera prefab from the scene hierarchy and create a new Camera object tagged as Main Camera before adding the Mixed Reality Toolkit to the scene.
 
 
 ## Notes
