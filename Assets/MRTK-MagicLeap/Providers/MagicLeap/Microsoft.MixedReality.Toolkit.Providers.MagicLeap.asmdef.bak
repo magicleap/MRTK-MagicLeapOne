@@ -1,0 +1,20 @@
+{
+    "name": "Microsoft.MixedReality.Toolkit.Providers.MagicLeap",
+    "references": [
+        "Microsoft.MixedReality.Toolkit",
+        "UnityEngine.XR.MagicLeap",
+        "Microsoft.MixedReality.Toolkit.Providers.XRSDK"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "Lumin"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
