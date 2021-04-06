@@ -60,8 +60,8 @@ This is an experimental release, and not all Magic Leap device functionality is 
 17. Build & Run.
 
 ## Troubleshooting
-- Make sure that Zero Iteration is disconnected if you are trying to play and interact with the project in the Unity Editor Game window.
-- If you created a new Camera object, make sure it is tagged as the Main Camera
+- Make sure that Zero Iteration is disconnected if you are trying to interact with the project in the Unity Editor Game window.
+- If you created a new Camera object, make sure it is tagged as the Main Camera.
 
 
 ## Notes
