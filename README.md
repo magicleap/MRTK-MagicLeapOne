@@ -67,7 +67,7 @@ This is an experimental release, and not all Magic Leap device functionality is 
 ## Notes
 1. Experimental. Still subject to errors, use at your own risk. Recommend backing up your project before implementing.
 3. Hand Mesh is not fully implemented.
-4. Spatial Mapping, Eye Tracking, Voice Recognition & System Keyboard are not currently integrated.
+4. Eye Tracking, Voice Recognition & System Keyboard are not currently integrated.
 5. Change _CurrentHandSettings or _CurrentControllerSettings in MagicLeapDeviceManager.cs to ignore specific Controllers or Hands as needed prior to building (not yet implemented for dynamically setting at run-time).
 6. Note you can use the Trigger, Bumper, and HomeTap as digital input, but that HomeTap down and HomeTap up are both executed simultaneously on HomeTap up; no response is provided for HomeTap down, due to this being a system-level button.
 7. You can also use the Touchpad Touch, Touchpad Press, and Touchpad position as input.
