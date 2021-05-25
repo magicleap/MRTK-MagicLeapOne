@@ -80,6 +80,7 @@ namespace MagicLeap.MRTK.SpatialAwareness
 				EditorGUILayout.Space();
 				EditorGUILayout.PropertyField(batchSize);
 			}
+            serializedObject.ApplyModifiedProperties();
 
 		}
 	}

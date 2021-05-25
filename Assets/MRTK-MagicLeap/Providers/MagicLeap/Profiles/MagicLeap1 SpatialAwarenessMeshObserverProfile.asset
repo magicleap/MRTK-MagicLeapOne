@@ -32,4 +32,4 @@ MonoBehaviour:
   RemoveMeshSkirt: 1
   FillHoleLength: 1
   DisconnectedComponentArea: 0.25
-  BatchSize: 16
+  BatchSize: 15
