@@ -17,8 +17,8 @@ MonoBehaviour:
   defaultControllerVisualizationType:
     reference: Microsoft.MixedReality.Toolkit.Input.MixedRealityControllerVisualizer,
       Microsoft.MixedReality.Toolkit.SDK
-  useDefaultModels: 1
-  defaultControllerModelMaterial: {fileID: 2100000, guid: 54322026142964d4084eda2478d9b1a2, type: 2}
+  usePlatformModels: 1
+  platformModelMaterial: {fileID: 2100000, guid: 54322026142964d4084eda2478d9b1a2, type: 2}
   globalLeftControllerModel: {fileID: 0}
   globalRightControllerModel: {fileID: 0}
   globalLeftHandVisualizer: {fileID: 1227372834072826, guid: 378f91dbbff9e2343b27a467467750bf, type: 3}
@@ -28,8 +28,8 @@ MonoBehaviour:
     controllerType:
       reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapMRTKController, Assembly-CSharp
     handedness: 1
-    useDefaultModel: 0
-    defaultModelMaterial: {fileID: 0}
+    usePlatformModels: 0
+    platformModelMaterial: {fileID: 0}
     overrideModel: {fileID: 0}
     controllerVisualizationType:
       reference: 
@@ -37,8 +37,8 @@ MonoBehaviour:
     controllerType:
       reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapMRTKController, Assembly-CSharp
     handedness: 2
-    useDefaultModel: 0
-    defaultModelMaterial: {fileID: 0}
+    usePlatformModels: 0
+    platformModelMaterial: {fileID: 0}
     overrideModel: {fileID: 0}
     controllerVisualizationType:
       reference: 
@@ -46,8 +46,8 @@ MonoBehaviour:
     controllerType:
       reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapHand, Assembly-CSharp
     handedness: 1
-    useDefaultModel: 0
-    defaultModelMaterial: {fileID: 0}
+    usePlatformModels: 0
+    platformModelMaterial: {fileID: 0}
     overrideModel: {fileID: 0}
     controllerVisualizationType:
       reference: 
@@ -55,8 +55,8 @@ MonoBehaviour:
     controllerType:
       reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapHand, Assembly-CSharp
     handedness: 2
-    useDefaultModel: 0
-    defaultModelMaterial: {fileID: 0}
+    usePlatformModels: 0
+    platformModelMaterial: {fileID: 0}
     overrideModel: {fileID: 0}
     controllerVisualizationType:
       reference: 

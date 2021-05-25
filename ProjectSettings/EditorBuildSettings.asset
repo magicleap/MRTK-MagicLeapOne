@@ -4,14 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 1
-    path: Assets/MRTK/Examples/Demos/HandTracking/Scenes/HandInteractionExamples.unity
-    guid: 3dd4a396b5225f8469b9a1eb608bfa57
+  m_Scenes: []
   m_configObjects:
-    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: b21102710e223a345a4e391497dba477, type: 2}
-    com.unity.xr.magicleap.magic_leap_settings: {fileID: 11400000, guid: 340d1805f23944187af2535b84cf6fc7, type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 0419cff7d3cd041a9ad703d078b97609, type: 2}
+    Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: fb90ef7fd72822d4daa384534a269471, type: 2}
+    com.unity.xr.magicleap.magic_leap_settings: {fileID: 11400000, guid: 63fd66a12ee146845847693cd191cb1e, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 03010e95cf68c2c4aa967c851e3bda31, type: 2}
