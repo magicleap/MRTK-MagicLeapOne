@@ -99,7 +99,7 @@ If you want to test other MRTK Scenes, additional configuration is required. The
     1. Set **Company Name** and **Product Name**.  
     2. Under **Other Settings > Identification > Bundle Identifier**, enable **Override Default Bundle Identifier** to allow text entry.  
     3. Set the **Bundle Identifier**. Make sure to use lowercase letters only. ex: *com.yourcompanyname.xxx*  
-    4. Under **Publishing Settings**, set the developer cert. You can generate a developer certificate by going to the [Publish](https://developer.magicleap.com/dashboard) section of the website and selecting certificates.  
+    4. Under **Publishing Settings**, set the developer cert. You can generate a developer certificate by going to the [Publish](https://developer.magicleap.com/dashboard) section of the Magic Leap website and selecting certificates.  
 
 ## Permissions
 1. For your application to have access certain Magic Leap features, you need to configure your project's permissions. In **Project Settings** window, navigate to **Magic Leap > Manifest Settings** and add the following privileges:
