@@ -39,9 +39,6 @@ using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.XRSDK.Input;
 
-#if PLATFORM_LUMIN
-using UnityEngine.XR.MagicLeap;
-#endif
 
 using MagicLeap.MRTK.DeviceManagement.Input.Hands;
 using Microsoft.MixedReality.Toolkit.XRSDK;
