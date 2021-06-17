@@ -66,10 +66,9 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
         {
             get
             {
-                if (!TryGetJoint(TrackedHandJoint.Palm, out var palmPose)) return false;
+                if (!TryGetJoint(TrackedHandJoint.Palm, out var palmPose) || CameraCache.Main == null) return false;
 
                 Transform cameraTransform = CameraCache.Main.transform;
-
                 Vector3 projectedPalmUp = Vector3.ProjectOnPlane(-palmPose.Up, cameraTransform.up);
 
                 // We check if the palm forward is roughly in line with the camera lookAt
