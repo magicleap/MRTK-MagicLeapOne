@@ -12,7 +12,9 @@
     "lumin"
   ],
   "dependencies": {
-    "com.unity.xr.magicleap": "6.2.2"
+    "com.unity.xr.magicleap": "6.2.2",
+    "com.unity.ugui": "1.0.0",
+    "com.unity.textmeshpro": "3.0.1"
   },
   "author": {
     "name": "Magic Leap",
