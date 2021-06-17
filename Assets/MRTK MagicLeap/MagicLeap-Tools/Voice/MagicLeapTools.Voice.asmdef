@@ -1,0 +1,20 @@
+{
+    "name": "MagicLeapTools.Voice",
+    "rootNamespace": "",
+    "references": [
+        "UnityEngine.XR.MagicLeap",
+        "LuminUnity"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "Lumin"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
