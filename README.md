@@ -1,74 +1,160 @@
-# MRTK 2.6 Integration Guide for Unity 2020.2 / MLSDK 0.25.0
-### Last Updated: 3/17/2021
+# MRTK 2.7 Integration Guide for Unity 2020.2.x / MLSDK 0.25.0
+### Last Updated: 6/17/2021  
 
-## Summary
+## Overview 
+[MRTK-MagicLeap](https://github.com/magicleap/MRTK-MagicLeap) is an extension to Microsoft's open source Mixed Reality Toolkit ([MRTK](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/mrtk-getting-started "Microsoft MRTK documentation ")) for Unity. It adds compatibility for the Magic Leap platform, including head and hand tracking, and controller support. Using this plug-in, applications built using MRTK will be able to add support for Magic Leap devices. Some features such as native keyboard support are not yet implemented. 
 
-MRTK-MagicLeap is an extension to Microsoft's open source Mixed Reality Toolkit (MRTK) for Unity. This adds basic compatibility with the Magic Leap platform, including head tracking, Magic Leap hand tracking, and Magic Leap controller support to MRTK. Using this plug-in, applications built using MRTK will be able to use this basic functionality on Magic Leap devices in a few simple steps. Note that some features such as native keyboard support are not yet implemented.  
+### Downloads:
+Please download the latest release from the [releases page](https://github.com/magicleap/MRTK-MagicLeap/releases).
 
-This is an experimental release, and not all Magic Leap device functionality is exposed via the MRTK. Please see the Notes below for more details.
-
-
-## Setup Steps
-
-1. Create New Unity 2020.2 Project
-2. Change Build Platform to Lumin in File -> Build Settings
-3. XR Plug-in Management: Install XR Plugin Management 4.0.1 (verified) or later from Window -> Package Manager, or click "Install XR Plug-In Management" from Edit -> Project Settings -> XR Plug-in Management.
-4. XR Plug-in Management: Add Magic Leap to Lumin target
-5. In Window -> Package Manager, update the Magic Leap XR Plugin version to 6.2.2 or later.  If not already set to this version, click on the arrow to expand, click “See other versions”, click on the version number (e.g. 6.2.2), then click “Install” on the bottom right of the window.
-6. Install MRTK from https://github.com/Microsoft/MixedRealityToolkit-Unity/releases:
-   - Import MRTK Foundation 2.6.x. Apply Recommended MRTK Settings from the popup window that appears after doing so.
-   - Import MRTK Examples 2.6.x.
-8. Open the HandInteractionExamples Scene (Assets -> MRTK -> Examples -> Demos -> HandTracking) and a popup will prompt you to Import TMP Essentials (TextMeshPro).
-9. Click Import TMP Essentials. Close the prompt.
-10. Import Magic Leap UnityPackage 0.25.0 (and set Lumin SDK in Unity -> Preferences to mlsdk 0.25.0, e.g. /Users/[username]/MagicLeap/mlsdk/v0.25.0). These packages are downloadable from The Lab, available at https://developer.magicleap.com/downloads/lab. Import all files.
-11. Import the provided MRTK2.6-MagicLeap Unity Package distribution file and import all files.
-12. Open the included HandInteractionExamplesMagicLeap scene.
-13. In the scene:
-    - Verify on the MixedRealityToolkit object that MagicLeap1InputProfile is being used.
-    - Find the MixedRealityInputModule component on the Main Camera, and check the box “Force Module Active”. Remember to do this for any scene that you wish to use the UGUI (Unity GUI) input.
-    - Note that for porting your own projects, the key elements will be:
-      - Creating a single Camera object in the scene tagged as Main Camera.
-      - Setting the MixedRealityToolkit profile to the Magic Leap profile.
-      - Turning on “Force Module Active” if using UGUI components
-      - Setting the controller and hand settings so the appropriate interactions are being used for your app. See Note 7 below in “Notes”.
-14. In Edit -> Project Settings -> Player:
-    - Set Company Name and Product Name
-    - In Other Settings, set Identification -> Bundle Identifier
-       - If needed, check "Override Default Bundle Identifier" to allow text entry.
-       - Then edit the Bundle identifier to something like com.yourcompanyname.xxx, make sure it is all lowercase unlike what is prefilled.
-       - (optional) Set the Version Code to 1, set the Version Name to 1.0.
-    - In Publishing Settings, set the developer certificate. You can generate a developer certificate [here](https://developer.magicleap.com/) under the Publish tab.
-15. In Project Settings, navigate to Magic Leap -> Manifest Settings and add the following privileges:
-    - ControllerPose
-    - GesturesConfig
-    - GesturesSubscribe
-    - HandMesh (optional)
-    - Internet (optional)
-    - PcfRead (optional)
-    - WorldReconstruction (optional)
-    — ---
-    - LocalAreaNetwork
-16. In scene (can be the HandInteraction Example or other MRTK Scene):
-    - Find Camera object
-    - Add TrackedPoseDriver if one doesn’t exist, with default settings:
-      - Generic XR Device
-      - Center Eye - HMD Reference
-      - Rotation & Position
-      - Update & Before Render
-    - Find MixedRealityToolkit object
-      - Change Pulldown Profile to “MagicLeap1 Configuration Profile”
-17. Build & Run.
-
-## Troubleshooting
-- Make sure that Zero Iteration is disconnected if you are trying to interact with the project in the Unity Editor Game window.
-- If you created a new Camera object, make sure it is tagged as the Main Camera.
+\*Some features are not implemented or supported at this time. Please see the [limitations](#limitations) section for more details.
 
 
-## Notes
-1. Experimental. Still subject to errors, use at your own risk. Recommend backing up your project before implementing.
-3. Hand Mesh is not fully implemented.
-4. Eye Tracking, Voice Recognition & System Keyboard are not currently integrated.
-5. Change _CurrentHandSettings or _CurrentControllerSettings in MagicLeapDeviceManager.cs to ignore specific Controllers or Hands as needed prior to building (not yet implemented for dynamically setting at run-time).
-6. Note you can use the Trigger, Bumper, and HomeTap as digital input, but that HomeTap down and HomeTap up are both executed simultaneously on HomeTap up; no response is provided for HomeTap down, due to this being a system-level button.
-7. You can also use the Touchpad Touch, Touchpad Press, and Touchpad position as input.
-8. To use any other MRTK Example Scene, open the MRTK Example scene and follow Step 12 above.
+
+## In this Article
+- [Features](#features)
+- [Installation Guide](#installation-guide)
+- [Examples and Scene Settings](#examples-and-scene-settings)
+- [Building Your Application](#building-your-application)
+- [Notes](#notes)
+
+# Features
+This following MRTK Features are supported in the latest release. 
+
+Supported Features in MRTK 
+- Hand Tracking
+- Hand Skeleton / Gestures
+- Magic Leap Controller
+- Voice Input (Using Google speech to text)
+- Scene Meshing
+- Gaze Input (aka Eye Tracking)
+
+Unsupported Features in MRTK
+- Hand Meshing
+- Planes Detection
+- Native Keyboard
+   
+This package also includes support for Zero Iteration, which allows you to test your application without having to build and installing it on your device.
+
+
+# Installation Guide
+## Platform Settings
+To use Magic Leap's MRTK feature, your Unity project needs to have Lumin as the build target.
+1. Create a new Unity 2020.2.x project.
+1. In the menu, go to **File** and select **Build Settings**.
+1. Under **Platform**, select **Lumin**.
+1. Click **Switch Platform**.  
+
+## Configuring XR Plugin Management
+Configure Unity's XR plug-in framework to integrate Magic Leap into Unity’s engine and make full use of its features. 
+
+1.  To install the latest version of the **Magic Leap XR Plugin**, open the Package Manager **Window > Package Manager**.
+2.  Select **Unity Registry** from the package registry dropdown to view all packages provided by Unity.  
+
+4.  locate the **Magic Leap XR Plugin**, select the arrow to expand the package options then **See other versions**. Select version **6.2.2** and click **Install**.  
+
+1. After the package is installed, open the **XR Plugin Management** settings **File > Build Settings > Player Settings > XR Plug-in Management** and enable **Magic Leap** as a Plug-in Provider on the **Lumin** Platform.  
+
+## Installing Dependencies 
+Before importing MRTK Magic Leap, install the package's dependencies - The Magic Leap SDK, MRTK Foundations, MRTK Examples, and Text Mesh Pro. 
+### Magic Leap Unity SDK
+1. From the menu, go to **Assets > Import Package > Custom Package**.
+2. Find and Open the **Magic Leap Unity Package**. ex:  `C:/Users/YourUserName/MagicLeap/tools/unity/0.25.0/MagicLeap.unitypackage`
+3. In the **Import Unity Package** window, make sure everything is selected, click **Import**.
+   
+### Microsoft Mixed Reality Toolkit
+1. Download version 2.7.x of **MRTK Foundation** and **MRTK Examples** from the MRTK [GitHub] (https://github.com/Microsoft/MixedRealityToolkit-Unity/releases).
+1. Import the **MRTK Foundation 2.7.x** package into your Unity project. Apply the recommended MRTK settings from the popup window that appears after doing so.
+1. Next, import the **MRTK Examples 2.7.x** package into your project.
+### Text Mesh Pro
+1. Import the **TMP Essential Resources** by selecting **Window > TextMeshPro > Import TMP Essential Resources**.  
+
+## Installing the Magic Leap MRTK Plugin
+
+1. Import the [MRTK1.3-MagicLeap Unity Package](https://github.com/magicleap/MRTK-MagicLeap/releases/) by going to **Assets > Import Package > Custom Package**. Import all of its contents.
+
+\* If you cannot locate the Magic Leap SDK Unity Package, make sure that you've installed the Unity bundle from [The Lab](https://developer.magicleap.com/downloads/lab). If you are upgrading from an previous version, follow the instructions int the [Upgrade Guide](#upgrade-guide)
+
+# Examples and Scene Settings
+
+This project includes two pre-configured scenes:
+- SpatialAwarenessMeshDemoMagicLeap
+- HandInteractionExamplesMagicLeap
+
+These scenes do not require additional configuration and serve as a blue print for Magic Leap's MRTK integration. They can also be used as a guide for creating custom MRTK Configuration Profiles.
+
+## Adding support to existing scenes.
+
+If you want to test other MRTK Scenes such as, additional configuration is required. The steps below explain how to configure other scenes to support the Magic Leap platform. Please note that some Magic Leap features are still not supported - Please see the [limitations](#limitations) section for more details.
+
+1. Open the **HandInteractionExamples** scene.
+1. Select the **MixedRealityToolkit** in the Hierarchy. Set the configuration to the **MagicLeap1 ConfigurationProfile**.
+1. Select the **Main Camera** and in the **MixedRealityInputModule** select **Force Module Active** is enable. This enables interaction with Unity's canvas components.
+1. Verify that the Camera has a **TrackedPoseDriver** with the default values:  
+    - Generic XR Device
+    - Center Eye - HMD Reference
+    - Rotation & Position
+    - Update & Before Render
+1. Some examples may require additional controller and hand configuration to insure proper interactions - see the [Input](#input) section.  
+
+# Building Your Application
+## Publishing Settings
+1. First, set the projects identity and certificate settings. Navigate to **Edit > Project Settings > Player**.  
+    1. Set **Company Name** and **Product Name**.  
+    2. Under **Other Settings > Identification > Bundle Identifier**, enable **Override Default Bundle Identifier** to allow text entry.  
+    3. Set the **Bundle Identifier**. Make sure to use lowercase letters only. ex: *com.yourcompanyname.xxx*  
+    4. Under **Publishing Settings**, set the developer cert. You can generate a developer certificate by going to the [Publish](https://developer.magicleap.com/dashboard "Link to Magic Leap Developer Portal website") section of the website and selecting certificates.  
+
+## Permissions
+1. Next, configure your projects permissions. In **Project Settings** window, navigate to **Magic Leap > Manifest Settings** and add the following privileges:
+   - ControllerPose
+   - GesturesConfig
+   - GesturesSubscribe
+   - HandMesh (optional)
+   - Internet (optional)
+   - PcfRead (optional)
+   - WorldReconstruction
+   - LocalAreaNetwork
+
+## Build and Run
+
+1. Open the **Build Settings** window and add the scenes you want to build to the **Scenes In Build**. 
+1. Select **Build And Run**.
+
+**Note**: To publish your app to the store, the **Version Name**, in the **Player Settings > Identification** needs to be set to at least one decimal place (ex: *Version Name: 1.0*). This step is not required for development builds.
+
+
+# Upgrade Guide
+If you are upgrading from a previous version of the MRTK Magic Leap Package follow the steps below. 
+
+1. Delete existing the following folders:  
+    - `Assets/MRTK-MagicLeap`
+    - `Assets/MagicLeap-Tools` (If present)
+
+2. If you are upgrading to a newer version of both MRTK and the MRTK Magic Leap, follow the instructions on [Microsofts Upgrade Guide](https://docs.microsoft.com/en-us/windows/mixed-reality/mrtk-unity/updates-deployment/updating?view=mrtkunity-2021-05) to update the MRTK components. Otherwise, continue to the next step. 
+
+3. Download the latest version of the MRTK package from the [release section](https://github.com/magicleap/MRTK-MagicLeap/releases) on the GitHub page.
+
+4. Import the newly downloaded package into your Unity project.
+
+
+# Notes
+
+#### Spatial Awareness
+- Magic Leap's specific mesh features such as Vertex Confidence and Planarization can be enabled in the inspector when selecting the Magic Leap's SpatialAwarenessMeshOberverProfile.
+- The MRTK spatial mesh shaders require **Force Multipass** to be enabled. This can be done in Project Settings > Magic Leap Settings.
+- Meshing Settings can be changed at runtime using Magic Leap's MeshingSettings API.
+- Scene Understanding and Plane Finding are not supported.
+
+#### Input
+- To ignore specific Controllers or Hands, edit the `_CurrentHandSettings` and `_CurrentControllerSettings` values before building in the `MagicLeapDeviceManager.cs` script. Run-time settings changes are not yet implemented.
+- You can use the `Trigger`, `Bumper`, and `HomeTap` as digital inputs. However,  no response is provided for `HomeTap down`. Instead, `HomeTap down` and `HomeTap up` are both executed simultaneously on `HomeTap up`. This is due to it being a system-level button.
+- You can also use the *Touchpad Touch*, *Touchpad Press*, and *Touchpad position* as input.
+
+#### Limitations
+- This package is experimental and subject to errors, use at your own risk. We recommend backing up your project before implementing.
+- The Hand Mesh feature is not fully implemented.
+- The System Keyboard is not currently integrated.
+- Run-time input settings changes are not yet implemented.
+- No response is provided for the *HomeTap down* input. This is due to it being a system-level button.
+
