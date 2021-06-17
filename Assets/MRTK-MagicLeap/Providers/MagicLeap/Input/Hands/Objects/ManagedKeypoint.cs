@@ -155,6 +155,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
                     if (Vector3.Distance(keyPointLocation, decayPoints[i]) < _lostKeyPointDistance)
                     {
                         currentVisibility = false;
+                        keyPointLocation=  positionRaw = positionFiltered = decayPoints[0];
                         break;
                     }
                 }
