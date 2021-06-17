@@ -321,39 +321,39 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
                     if (_managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.C || _managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.OpenHand || _managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.L || _managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.Finger)
                     {
 
-                        if (_managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.C)
-                        {
-                            if ((_managedHand.Hand.HandKeyPoseConfidence < 0.9 || Time.realtimeSinceStartup - _keyPoseChangedTime < .1f ))
-                            {
-                                return;
-                            }
-                        }
+                     
 
-                        // if (_managedHand.Skeleton.Thumb.Tip.Visible && _managedHand.Skeleton.Index.Tip.Visible)
-                        //{
-                            //dynamic release:
-                            if (Vector3.Distance(_managedHand.Skeleton.Thumb.Tip.positionFiltered, _managedHand.Skeleton.Index.Tip.positionFiltered) > _dynamicReleaseDistance)
-                            {
-                                //end intent:
-                                _collapsed = false;
+                         if (_managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.C)
+                         {
+                             bool isReleasePose = _managedHand.Hand.HandKeyPoseConfidence > 0.9
+                                                  || Time.realtimeSinceStartup - _keyPoseChangedTime >= .1f;
+                        
+                             bool isDynamicRelease = (_managedHand.Skeleton.Thumb.Tip.Visible &&
+                                                      _managedHand.Skeleton.Index.Tip.Visible &&
+                                                      Vector3.Distance(_managedHand.Skeleton.Thumb.Tip.positionFiltered,
+                                                          _managedHand.Skeleton.Index.Tip.positionFiltered) >
+                                                      _dynamicReleaseDistance);
+                             if(!isReleasePose && !isDynamicRelease)
+                                 return;
+                         }
 
-                                //accept keypose change:
-                                VerifiedGesture = _managedHand.Hand.KeyPose;
-                                _proposedKeyPose = _managedHand.Hand.KeyPose;
-                                OnVerifiedGestureChanged?.Invoke(_managedHand, VerifiedGesture);
+                         _collapsed = false;
 
-                                if (_managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.Finger || _managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.L)
-                                {
-                                    Intent = IntentPose.Pointing;
-                                    OnIntentChanged?.Invoke(_managedHand, Intent);
-                                }
-                                else if (_managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.NoPose  || _managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.C || _managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.OpenHand || _managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.Thumb)
-                                {
-                                    Intent = IntentPose.Relaxed;
-                                    OnIntentChanged?.Invoke(_managedHand, Intent);
-                                }
-                            }
-                        //}
+                         //accept keypose change:
+                         VerifiedGesture = _managedHand.Hand.KeyPose;
+                         _proposedKeyPose = _managedHand.Hand.KeyPose;
+                         OnVerifiedGestureChanged?.Invoke(_managedHand, VerifiedGesture);
+
+                         if (_managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.Finger || _managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.L)
+                         {
+                             Intent = IntentPose.Pointing;
+                             OnIntentChanged?.Invoke(_managedHand, Intent);
+                         }
+                         else if (_managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.NoPose  || _managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.C || _managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.OpenHand || _managedHand.Hand.KeyPose == MLHandTracking.HandKeyPose.Thumb)
+                         {
+                             Intent = IntentPose.Relaxed;
+                             OnIntentChanged?.Invoke(_managedHand, Intent);
+                         }
                     }
                     
                 }
