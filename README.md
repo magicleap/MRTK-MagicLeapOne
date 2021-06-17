@@ -81,7 +81,7 @@ These scenes do not require additional configuration and serve as a blueprint fo
 
 ## Add support to existing scenes.
 
-If you want to test other MRTK Scenes, additional configuration is required. The steps below explain how to configure other scenes to support the Magic Leap platform. Please note that some Magic Leap features are still not supported - Please see the [limitations](#limitations) section for more details.
+If you want to test other MRTK Scenes, additional configuration is required. The steps below explain how to configure other scenes to support the Magic Leap platform. Please note that some Magic Leap features are still not supported. See the [limitations](#limitations) section for more details.
 
 1. Open the **HandInteractionExamples** scene.
 1. Select the **MixedRealityToolkit** in the Hierarchy. Set the configuration to the **MagicLeap1 ConfigurationProfile**.
@@ -149,4 +149,3 @@ If you are upgrading from a previous version of the MRTK Magic Leap Package foll
 - The System Keyboard is not currently integrated.
 - Run-time input settings changes are not yet implemented.
 - No response is provided for the *HomeTap down* input. This is due to it being a system-level button.
-
