@@ -59,16 +59,16 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
 
         public MagicLeapHand(TrackingState trackingState, Handedness controllerHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null) : base(trackingState, controllerHandedness, inputSource, interactions)
         {
+           
         }
 
         public override bool IsInPointingPose
         {
             get
             {
-                if (!TryGetJoint(TrackedHandJoint.Palm, out var palmPose)) return false;
+                if (!TryGetJoint(TrackedHandJoint.Palm, out var palmPose) || CameraCache.Main == null) return false;
 
                 Transform cameraTransform = CameraCache.Main.transform;
-
                 Vector3 projectedPalmUp = Vector3.ProjectOnPlane(-palmPose.Up, cameraTransform.up);
 
                 // We check if the palm forward is roughly in line with the camera lookAt
@@ -106,9 +106,10 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             IsPositionApproximate = true;
             IsRotationAvailable = true;
         }
-
-        public void CleanupHand()
+        
+        public override void SetupDefaultInteractions()
         {
+            AssignControllerMappings(DefaultInteractions);
         }
 
         public void DoUpdate()
@@ -117,26 +118,42 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
 
             managedHand.Update();
             IntentPose pose = managedHand.Gesture.Intent;
-            IsPinching = (pose == IntentPose.Grasping || pose == IntentPose.Pinching);
+            IsPinching = false;
 
             IsPositionAvailable = IsRotationAvailable = managedHand.Visible;
-
+           
             if (IsPositionAvailable)
             {
+              
                 UpdateHandData(managedHand.Skeleton);
+                
+                currentGripPose = pose == IntentPose.Pinching
+                    ? new MixedRealityPose(managedHand.Gesture.Pinch.position, jointPoses[TrackedHandJoint.Palm].Rotation)
+                    : jointPoses[TrackedHandJoint.Palm];
+                
+                currentPointerPose = jointPoses[TrackedHandJoint.Palm];
+
+                currentIndexPose = jointPoses[TrackedHandJoint.IndexTip];
+
+                
+                //The pinch pose is lost if the hand joints are not visible because they are in the camera's clip plane.
+                //The clip plane value is set to the default Magic Leap clip plane to insure a valid hand pose.
+                IsPinching = (pose == IntentPose.Grasping || pose == IntentPose.Pinching);
+
                 UpdateHandRay(managedHand.Skeleton);
+
                 UpdateVelocity();
-
-                currentGripPose = jointPoses[TrackedHandJoint.Palm];
+                
                 CoreServices.InputSystem?.RaiseSourcePoseChanged(InputSource, this, currentGripPose);
-            }
 
+            }
+           
             for (int i = 0; i < Interactions?.Length; i++)
             {
                 switch (Interactions[i].InputType)
                 {
                     case DeviceInputType.SpatialPointer:
-                        Interactions[i].PoseData = currentPointerPose;
+                        Interactions[i].PoseData =  currentPointerPose;
                         if (Interactions[i].Changed)
                         {
                             CoreServices.InputSystem?.RaisePoseInputChanged(InputSource, ControllerHandedness, Interactions[i].MixedRealityInputAction, currentPointerPose);
@@ -166,7 +183,6 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
                         break;
                     case DeviceInputType.TriggerPress:
                         Interactions[i].BoolData = IsPinching;
-
                         if (Interactions[i].Changed)
                         {
                             if (Interactions[i].BoolData)
@@ -180,17 +196,22 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
                         }
                         break;
                     case DeviceInputType.IndexFinger:
-                        UpdateIndexFingerData(Interactions[i]);
+                        Interactions[i].PoseData = currentIndexPose;
+                        // If our value changed raise it.
+                        if (Interactions[i].Changed)
+                        {
+                            // Raise input system Event if it enabled
+                            CoreServices.InputSystem?.RaisePoseInputChanged(InputSource, ControllerHandedness, Interactions[i].MixedRealityInputAction, currentIndexPose);
+                        }
                         break;
                 }
             }
         }
-
         protected void UpdateHandRay(ManagedHandSkeleton hand)
         {
             //shoulder:
             float shoulderDistance = shoulderWidth * .5f;
-
+            
             //swap for the left shoulder:
             if (ControllerHandedness == Handedness.Left)
             {
@@ -204,12 +225,12 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             Vector3 shoulder = TransformUtilities.WorldPosition(camera.position, Quaternion.LookRotation(flatForward), new Vector2(shoulderDistance, Mathf.Abs(shoulderDistanceBelowHead) * -1));
 
             Vector3 pointerOrigin = Vector3.Lerp(hand.Thumb.Knuckle.positionFiltered, hand.Position, .5f);
-
+            
             //direction:
             Quaternion orientation = Quaternion.LookRotation(Vector3.Normalize(pointerOrigin - shoulder), hand.Rotation * Vector3.up);
-
             currentPointerPose.Position = pointerOrigin;
             currentPointerPose.Rotation = orientation;
+            
         }
 
         // Magic Leap conversion code inspired by the work of Tarukosu
@@ -252,6 +273,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
         {
             if(keyPoint == null) return;
             UpdateJointPose(joint, keyPoint.GetPosition(FilterType.Filtered), keyPoint.Rotation);
+
         }
 
         protected void UpdateJointPose(TrackedHandJoint joint, Vector3 position, Quaternion rotation)
@@ -264,24 +286,6 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             else
             {
                 jointPoses[joint] = pose;
-            }
-        }
-
-        private void UpdateIndexFingerData(MixedRealityInteractionMapping interactionMapping)
-        {
-            if (jointPoses.TryGetValue(TrackedHandJoint.IndexTip, out var pose))
-            {
-                currentIndexPose.Rotation = pose.Rotation;
-                currentIndexPose.Position = pose.Position;
-            }
-
-            interactionMapping.PoseData = currentIndexPose;
-
-            // If our value changed raise it.
-            if (interactionMapping.Changed)
-            {
-                // Raise input system Event if it enabled
-                CoreServices.InputSystem?.RaisePoseInputChanged(InputSource, ControllerHandedness, interactionMapping.MixedRealityInputAction, currentIndexPose);
             }
         }
 

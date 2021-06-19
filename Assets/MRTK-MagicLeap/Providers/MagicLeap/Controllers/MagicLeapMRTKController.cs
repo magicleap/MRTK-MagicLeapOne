@@ -30,7 +30,7 @@
 // Note code inspired from https://github.com/provencher/MRTK-MagicLeap
 //
 
-using System.Collections.Generic;
+using System;
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
@@ -38,17 +38,17 @@ using UnityEngine;
 #if PLATFORM_LUMIN
 using UnityEngine.XR.MagicLeap;
 #endif
-using Microsoft.MixedReality.Toolkit.XRSDK.Input;
 
 namespace MagicLeap.MRTK.DeviceManagement.Input
 {
     [MixedRealityController(SupportedControllerType.GenericUnity,
         new[] { Handedness.Left, Handedness.Right })]
-    public class MagicLeapMRTKController : BaseController
+    public class MagicLeapMRTKController : BaseController, IMixedRealityHapticFeedback
     {
 #if PLATFORM_LUMIN
         MLInput.Controller mlController;
 #endif
+        
         public MagicLeapMRTKController(TrackingState trackingState, Handedness controllerHandedness, IMixedRealityInputSource inputSource = null, MixedRealityInteractionMapping[] interactions = null) : base(trackingState, controllerHandedness, inputSource, interactions)
         {
         }
@@ -76,7 +76,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             MLInput.OnTriggerUp -= MLControllerTriggerUp;
 #endif
         }
-
+        
         public override MixedRealityInteractionMapping[] DefaultLeftHandedInteractions => new[]
         {
             new MixedRealityInteractionMapping(0, "Spatial Pointer", AxisType.SixDof, DeviceInputType.SpatialPointer),
@@ -85,7 +85,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             new MixedRealityInteractionMapping(3, "Home Press", AxisType.Digital, DeviceInputType.ButtonPress),
             new MixedRealityInteractionMapping(4, "Touchpad Touch", AxisType.Digital, DeviceInputType.ButtonPress),
             new MixedRealityInteractionMapping(5, "Touchpad Position", AxisType.DualAxis, DeviceInputType.Touchpad, ControllerMappingLibrary.AXIS_17, ControllerMappingLibrary.AXIS_18),
-            new MixedRealityInteractionMapping(6, "Touchpad Press", AxisType.Digital, DeviceInputType.ButtonPress),
+            new MixedRealityInteractionMapping(6, "Touchpad Press", AxisType.Digital, DeviceInputType.TouchpadPress),
         };
 
         public override MixedRealityInteractionMapping[] DefaultRightHandedInteractions => new[]
@@ -113,13 +113,13 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
 
         public void UpdatePoses()
         {
+            
             MixedRealityPose pointerPose = new MixedRealityPose(mlController.Position, mlController.Orientation); ;
             Interactions[0].PoseData = pointerPose;
+            
+            CoreServices.InputSystem?.RaiseSourcePoseChanged(InputSource, this, pointerPose);
             CoreServices.InputSystem?.RaisePoseInputChanged(InputSource, ControllerHandedness, Interactions[0].MixedRealityInputAction, pointerPose);
-
-            //Interactions[2].PoseData = pointerPose;
-            //CoreServices.InputSystem?.RaisePoseInputChanged(InputSource, ControllerHandedness, Interactions[2].MixedRealityInputAction, pointerPose);
-
+         
             //This is also a good time to implement the Touchpad if you want to update that source type
             if (Interactions.Length > 4)
             {
@@ -178,8 +178,6 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
                 }
             }
 
-            // Trigger positions too if that's needed. Also if you want to turn on / off pointer
-            // based off distance
         }
 
         void MLControllerButtonDown(byte controllerId, MLInput.Controller.Button button)
@@ -245,6 +243,22 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
         }
 
 #endif // PLATFORM_LUMIN
-
+        
+        public bool StartHapticImpulse(float intensity, float durationInSeconds = Single.MaxValue)
+        {
+#if PLATFORM_LUMIN
+            MLInput.Controller.FeedbackIntensity mlIntensity = (MLInput.Controller.FeedbackIntensity)((int)(intensity * 2.0f));
+            var result = mlController.StartFeedbackPatternVibe(MLInput.Controller.FeedbackPatternVibe.Buzz, mlIntensity);
+            return result == MLResult.Code.Ok;
+#else
+            return false;
+#endif
+        }
+        public void StopHapticFeedback()
+        {
+#if PLATFORM_LUMIN
+            mlController.StopFeedbackPatternVibe();
+#endif
+        }
     }
 }

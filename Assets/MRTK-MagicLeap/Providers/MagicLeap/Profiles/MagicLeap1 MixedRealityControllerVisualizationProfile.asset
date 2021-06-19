@@ -26,7 +26,7 @@ MonoBehaviour:
   controllerVisualizationSettings:
   - description: Magic Leap MRTK Controller
     controllerType:
-      reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapMRTKController, Assembly-CSharp
+      reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapMRTKController, MagicLeap.MRTK
     handedness: 1
     usePlatformModels: 0
     platformModelMaterial: {fileID: 0}
@@ -35,7 +35,7 @@ MonoBehaviour:
       reference: 
   - description: Magic Leap MRTK Controller
     controllerType:
-      reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapMRTKController, Assembly-CSharp
+      reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapMRTKController, MagicLeap.MRTK
     handedness: 2
     usePlatformModels: 0
     platformModelMaterial: {fileID: 0}
@@ -44,7 +44,7 @@ MonoBehaviour:
       reference: 
   - description: Magic Leap Hand
     controllerType:
-      reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapHand, Assembly-CSharp
+      reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapHand, MagicLeap.MRTK
     handedness: 1
     usePlatformModels: 0
     platformModelMaterial: {fileID: 0}
@@ -53,7 +53,7 @@ MonoBehaviour:
       reference: 
   - description: Magic Leap Hand
     controllerType:
-      reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapHand, Assembly-CSharp
+      reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapHand, MagicLeap.MRTK
     handedness: 2
     usePlatformModels: 0
     platformModelMaterial: {fileID: 0}

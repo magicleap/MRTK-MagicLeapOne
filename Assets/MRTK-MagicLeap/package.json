@@ -1,0 +1,23 @@
+{
+  "name": "com.magicleap.mrtk",
+  "displayName": "MRTK MagicLeap",
+  "version": "1.3.0",
+  "unity": "2020.2",
+  "documentationUrl": "https://github.com/magicleap/MRTK-MagicLeap",
+  "description": "An extension to provide compatibility with Magic Leap features such as hand tracking and 6dof controller support, to Microsoft's Mixed reality Toolkit (MRTK).",
+  "keywords": [
+    "magicleap",
+    "mrtk",
+    "AR",
+    "lumin"
+  ],
+  "dependencies": {
+    "com.unity.xr.magicleap": "6.2.2",
+    "com.unity.ugui": "1.0.0",
+    "com.unity.textmeshpro": "3.0.1"
+  },
+  "author": {
+    "name": "Magic Leap",
+    "url": "https://developer.magicleap.com/"
+  }
+}

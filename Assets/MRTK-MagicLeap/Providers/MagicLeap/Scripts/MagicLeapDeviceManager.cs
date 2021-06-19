@@ -30,6 +30,7 @@
 // Note code inspired from https://github.com/provencher/MRTK-MagicLeap
 //
 
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -38,11 +39,11 @@ using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.XRSDK.Input;
 
-#if PLATFORM_LUMIN
-using UnityEngine.XR.MagicLeap;
-#endif
 
 using MagicLeap.MRTK.DeviceManagement.Input.Hands;
+using Microsoft.MixedReality.Toolkit.XRSDK;
+using UnityEngine.XR.MagicLeap;
+using UnityEngine.XR.Management;
 
 namespace MagicLeap.MRTK.DeviceManagement.Input
 {
@@ -53,8 +54,8 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
     public class MagicLeapDeviceManager : XRSDKDeviceManager
     {
         List<IMixedRealityController> trackedControls = new List<IMixedRealityController>();
-        Dictionary<Handedness, Input.MagicLeapHand> trackedHands = new Dictionary<Handedness, Input.MagicLeapHand>();
-        Dictionary<Handedness, MagicLeapMRTKController> trackedControllers = new Dictionary<Handedness, MagicLeapMRTKController>();
+        Dictionary<Handedness, MagicLeapHand> trackedHands = new Dictionary<Handedness, MagicLeapHand>();
+
 
 #if PLATFORM_LUMIN
         private readonly MLHandTracking.HandKeyPose[] supportedGestures = new[]
@@ -71,7 +72,9 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
         };
 #endif
 
-        public bool IsReady { get; private set; } = false;
+        private bool? IsActiveLoader =>
+            LoaderHelpers.IsLoaderActive<MagicLeapLoader>();
+        
         public bool MLControllerCallbacksActive = false;
         public bool MLHandTrackingActive = false;
 
@@ -160,8 +163,50 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             uint priority = DefaultPriority,
             BaseMixedRealityProfile profile = null) : base(inputSystem, name, priority, profile)
         {
-#if PLATFORM_LUMIN && !UNITY_EDITOR
-            if (!MLControllerCallbacksActive && MLInput.Start().IsOk)
+
+        }
+        public override void Initialize()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            base.Initialize();
+        }
+        
+        private async void EnableIfLoaderBecomesActive()
+        {
+            await new WaitUntil(() => IsActiveLoader.HasValue);
+            if (IsActiveLoader.Value)
+            {
+                Enable();
+            }
+        }
+
+        public override void Enable()
+        {
+            if (!IsActiveLoader.HasValue)
+            {
+                IsEnabled = false;
+                EnableIfLoaderBecomesActive();
+                return;
+            }
+            else if (!IsActiveLoader.Value)
+            {
+                IsEnabled = false;
+                return;
+            }
+            
+            SetupInput();
+            
+            base.Enable();
+            
+        }
+
+        private void SetupInput()
+        {
+#if PLATFORM_LUMIN
+            if (!MLControllerCallbacksActive )
             {
                 MLInput.OnControllerConnected += MLControllerConnected;
                 MLInput.OnControllerDisconnected += MLControllerDisconnected;
@@ -169,39 +214,46 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
                 MLControllerCallbacksActive = true;
             }
 
-            if (!MLHandTrackingActive && MLHandTracking.Start().IsOk)
+            if (!MLHandTrackingActive && MLHandTracking.IsStarted &&  MLHandTracking.KeyPoseManager != null)
             {
-                MLHandTracking.KeyPoseManager.SetKeyPointsFilterLevel(MLHandTracking.KeyPointFilterLevel.Smoothed);
+                MLHandTracking.KeyPoseManager.SetKeyPointsFilterLevel(MLHandTracking.KeyPointFilterLevel.Raw);
                 MLHandTracking.KeyPoseManager.EnableKeyPoses(supportedGestures, true, false);
 
                 MLHandTrackingActive = true;
             }
 #endif
-
-            if (Instance == null)
-            {
-                Instance = this;
-            }
         }
 
         public override void Update()
         {
+            
+            if (!IsEnabled)
+            {
+                return;
+            }
+            
 #if PLATFORM_LUMIN
             // Ensure input is active
-#if !UNITY_EDITOR
             if (MLDevice.IsReady())
-#endif
             {
-#if !UNITY_EDITOR
-                UpdateHand(MLHandTracking.Right, Handedness.Right);
-                UpdateHand(MLHandTracking.Left, Handedness.Left);
-#endif
+                UpdateHands();
+                
                 foreach (MLControllerContainer controllerContainer in ConnectedControllers.Values)
                 {
                     controllerContainer.mrtkController.UpdatePoses();
                 }
+
             }
 #endif
+        }
+        
+        protected void UpdateHands()
+        {
+#if PLATFORM_LUMIN
+            UpdateHand(MLHandTracking.Right, Handedness.Right);
+            UpdateHand(MLHandTracking.Left, Handedness.Left);
+#endif
+
         }
 
         public override void Disable()
@@ -212,7 +264,6 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
                 RemoveAllControllerDevices();
                 MLInput.OnControllerConnected -= MLControllerConnected;
                 MLInput.OnControllerDisconnected -= MLControllerDisconnected;
-                MLInput.Stop();
 
                 MLControllerCallbacksActive = false;
             }
@@ -220,7 +271,6 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             if (MLHandTrackingActive)
             {
                 RemoveAllHandDevices();
-                MLHandTracking.Stop();
 
                 MLHandTrackingActive = true;
             }
@@ -231,7 +281,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             }
 #endif
         }
-
+        
         public override IMixedRealityController[] GetActiveControllers()
         {
             return trackedControls.ToArray<IMixedRealityController>();
@@ -246,35 +296,13 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
 
 #if PLATFORM_LUMIN
 #region Hand Management
+
         protected void UpdateHand(MLHandTracking.Hand mlHand, Handedness handedness)
         {
-            switch (CurrentHandSettings)
-            {
-                case HandSettings.None:
-                    return;
-
-                case HandSettings.Left:
-                    if (handedness != Handedness.Left)
-                    {
-                        return;
-                    }
-                    break;
-
-                case HandSettings.Right:
-                    if (handedness != Handedness.Right)
-                    {
-                        return;
-                    }
-                    break;
-
-                case HandSettings.Both:
-                    if (handedness != Handedness.Left && handedness != Handedness.Right)
-                    {
-                        return;
-                    }
-                    break;
-            }
-
+           
+            if(!IsHandednessValid(handedness,CurrentHandSettings))
+                return;
+            
             if (mlHand != null && mlHand.IsVisible)
             {
                 var hand = GetOrAddHand(mlHand, handedness);
@@ -282,14 +310,51 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             }
             else
             {
-                if (trackedHands.TryGetValue(handedness, out Input.MagicLeapHand hand))
-                {
-                    RemoveHandDevice(hand);
-                }
+                RemoveHandDevice(handedness);
+            }
+        }
+        
+        private void RemoveHandDevice(Handedness handedness)
+        {
+            if (trackedHands.TryGetValue(handedness, out MagicLeapHand hand))
+            {
+                RemoveHandDevice(hand);
             }
         }
 
-        private Input.MagicLeapHand GetOrAddHand(MLHandTracking.Hand mlHand, Handedness handedness)
+        private bool IsHandednessValid(Handedness handedness, HandSettings settings)
+        {
+            switch (settings)
+            {
+                case HandSettings.None:
+                    return false;
+
+                case HandSettings.Left:
+                    if (handedness != Handedness.Left)
+                    {
+                        return false;
+                    }
+                    break;
+
+                case HandSettings.Right:
+                    if (handedness != Handedness.Right)
+                    {
+                        return false;
+                    }
+                    break;
+
+                case HandSettings.Both:
+                    if (handedness != Handedness.Left && handedness != Handedness.Right)
+                    {
+                        return false;
+                    }
+                    break;
+            }
+
+            return true;
+        }
+
+        private MagicLeapHand GetOrAddHand(MLHandTracking.Hand mlHand, Handedness handedness)
         {
             if (trackedHands.ContainsKey(handedness))
             {
@@ -300,10 +365,9 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             var pointers = RequestPointers(SupportedControllerType.ArticulatedHand, handedness);
             var inputSourceType = InputSourceType.Hand;
 
-            IMixedRealityInputSystem inputSystem = Service as IMixedRealityInputSystem;
-            var inputSource = inputSystem?.RequestNewGenericInputSource($"Magic Leap {handedness} Hand", pointers, inputSourceType);
-
-            var controller = new Input.MagicLeapHand(TrackingState.Tracked, handedness, inputSource);
+            var inputSource = Service?.RequestNewGenericInputSource($"Magic Leap {handedness} Hand", pointers, inputSourceType);
+            
+            var controller = new MagicLeapHand(TrackingState.Tracked, handedness, inputSource);
             controller.Initalize(new ManagedHand(mlHand));
 
             for (int i = 0; i < controller.InputSource?.Pointers?.Length; i++)
@@ -311,8 +375,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
                 controller.InputSource.Pointers[i].Controller = controller;
             }
 
-            inputSystem?.RaiseSourceDetected(controller.InputSource, controller);
-
+            Service?.RaiseSourceDetected(controller.InputSource, controller);
             trackedHands.Add(handedness, controller);
 
             return controller;
@@ -323,18 +386,16 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             if (trackedHands.Count == 0) return;
 
             // Create a new list to avoid causing an error removing items from a list currently being iterated on.
-            foreach (Input.MagicLeapHand hand in new List<Input.MagicLeapHand>(trackedHands.Values))
+            foreach (MagicLeapHand hand in new List<MagicLeapHand>(trackedHands.Values))
             {
                 RemoveHandDevice(hand);
             }
             trackedHands.Clear();
         }
 
-        private void RemoveHandDevice(Input.MagicLeapHand hand)
+        private void RemoveHandDevice(MagicLeapHand hand)
         {
             if (hand == null) return;
-
-            hand.CleanupHand();
 
             CoreServices.InputSystem?.RaiseSourceLost(hand.InputSource, hand);
             trackedHands.Remove(hand.ControllerHandedness);
@@ -363,53 +424,42 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             }
             return null;
         }
+        
 
         void MLControllerConnected(byte controllerId)
         {
-#if PLATFORM_LUMIN
+            CameraCache.Main.GetComponent<MonoBehaviour>().StartCoroutine(ConnectOnValidPosition(controllerId));
+        }
 
+        IEnumerator ConnectOnValidPosition(byte controllerId)
+        {
+#if PLATFORM_LUMIN
             MLInput.Controller mlController = MLInput.GetController(controllerId);
+            Vector3 initialPosition = mlController.Position;
+            while (initialPosition == mlController.Position)
+            {
+                yield return null;
+            }
             if (mlController.Type == MLInput.Controller.ControlType.Control)
             {
                 if (!ConnectedControllers.ContainsKey(controllerId))
                 {
                     Handedness handedness = mlController.Hand == MLInput.Hand.Right ? Handedness.Right : Handedness.Left;
-                    switch(CurrentControllerSettings)
-                    {
-                        case HandSettings.None:
-                            return;
-
-                        case HandSettings.Left:
-                            if (handedness != Handedness.Left)
-                            {
-                                return;
-                            }
-                            break;
-
-                        case HandSettings.Right:
-                            if (handedness != Handedness.Right)
-                            {
-                                return;
-                            }
-                            break;
-
-                        case HandSettings.Both:
-                            break;
-                    }
+                    if(!IsHandednessValid(handedness , CurrentControllerSettings))
+                        yield break ;
 
                     var pointers = RequestPointers(SupportedControllerType.GenericUnity, handedness);
                     var inputSourceType = InputSourceType.Controller;
 
-                    IMixedRealityInputSystem inputSystem = Service as IMixedRealityInputSystem;
-                    var inputSource = inputSystem?.RequestNewGenericInputSource($"Magic Leap {handedness} Controller", pointers, inputSourceType);
+                    var inputSource = Service?.RequestNewGenericInputSource($"Magic Leap {handedness} Controller", pointers, inputSourceType);
 
                     MagicLeapMRTKController controller = new MagicLeapMRTKController(mlController, TrackingState.Tracked, handedness, inputSource);
                     for (int i = 0; i < controller.InputSource?.Pointers?.Length; i++)
                     {
                         controller.InputSource.Pointers[i].Controller = controller;
                     }
-
-                    inputSystem?.RaiseSourceDetected(controller.InputSource, controller);
+                    
+                    Service?.RaiseSourceDetected(controller.InputSource, controller);
                     ConnectedControllers[controllerId] = new MLControllerContainer()
                     {
                         controllerId = controllerId,

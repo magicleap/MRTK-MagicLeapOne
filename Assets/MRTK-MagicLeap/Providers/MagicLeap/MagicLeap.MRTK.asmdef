@@ -1,0 +1,28 @@
+{
+    "name": "MagicLeap.MRTK",
+    "rootNamespace": "",
+    "references": [
+        "UnityEngine.XR.MagicLeap",
+        "Microsoft.MixedReality.Toolkit",
+        "Microsoft.MixedReality.Toolkit.Providers.XRSDK",
+        "LuminUnity",
+        "Microsoft.MixedReality.Toolkit.Services.InputSystem",
+        "UnityEngine.SpatialTracking",
+        "Microsoft.MixedReality.Toolkit.SDK",
+        "MagicLeapTools.Voice",
+        "Unity.XR.Management",
+        "Microsoft.MixedReality.Toolkit.Async"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "Lumin"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

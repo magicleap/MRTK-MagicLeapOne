@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd8ebcfd7849ce84c9948ee3a3550109, type: 3}
+  m_Script: {fileID: 11500000, guid: 155fd6c65e7dd4041bf721c33f350381, type: 3}
   m_Name: MagicLeap1 SpatialAwarenessMeshObserverProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 1
@@ -32,4 +32,4 @@ MonoBehaviour:
   RemoveMeshSkirt: 1
   FillHoleLength: 1
   DisconnectedComponentArea: 0.25
-  BatchSize: 15
+  BatchSize: 16
