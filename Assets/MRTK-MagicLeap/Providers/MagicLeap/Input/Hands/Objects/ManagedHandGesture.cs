@@ -31,6 +31,7 @@
 using UnityEngine;
 using UnityEngine.XR.MagicLeap;
 using System;
+using Microsoft.MixedReality.Toolkit.Utilities;
 
 namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
 {
@@ -152,7 +153,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
             LastIntent = IntentPose.Relaxed;
             Intent = IntentPose.Relaxed;
 
-            _headpose = Camera.main.transform;
+            _headpose = CameraCache.Main.transform;
             //sets:
             _managedHand = managedHand;
             Pinch = new InteractionPoint();
