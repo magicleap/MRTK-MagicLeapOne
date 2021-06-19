@@ -61,7 +61,6 @@ Before importing MRTK Magic Leap, install the package's dependencies - The Magic
 1. Next, import the **MRTK Examples 2.7.x** package into your project.  
 
 #### Text Mesh Pro
-
 1. Import the **TMP Essential Resources** by selecting **Window > TextMeshPro > Import TMP Essential Resources**.  
 
 ## Install MRTK Magic Leap
@@ -72,7 +71,6 @@ After all of the dependencies are installed, download and install the MRTK Magic
 \* If you are upgrading from an previous version, follow the instructions provided in the [Upgrade Guide](#upgrade-guide).
 
 # Examples and Scene Settings
-
 This project includes two pre-configured scenes:
 - SpatialAwarenessMeshDemoMagicLeap
 - HandInteractionExamplesMagicLeap
@@ -80,7 +78,6 @@ This project includes two pre-configured scenes:
 These scenes do not require additional configuration and serve as a blueprint for Magic Leap's MRTK integration. They can also be used as a guide for creating custom MRTK Configuration Profiles.
 
 ## Add support to existing scenes.
-
 If you want to test other MRTK Scenes, additional configuration is required. The steps below explain how to configure other scenes to support the Magic Leap platform. Please note that some Magic Leap features are still not supported. See the [limitations](#limitations) section for more details.
 
 1. Open the **HandInteractionExamples** scene.
@@ -113,7 +110,6 @@ If you want to test other MRTK Scenes, additional configuration is required. The
    - LocalAreaNetwork
 
 ## Build and Run
-
 1. Open the **Build Settings** window and add the scenes you want to build to the **Scenes In Build**. 
 1. Select **Build And Run**.
 
@@ -126,24 +122,23 @@ If you are upgrading from a previous version of the MRTK Magic Leap Package foll
 1. Delete existing the following folders:  
     - `Assets/MRTK-MagicLeap`
     - `Assets/MagicLeap-Tools` (If present)
-1. If you are upgrading to a newer version of both MRTK and the MRTK Magic Leap, follow the instructions on [Microsoft's MRTK Upgrade Guide](https://docs.microsoft.com/en-us/windows/mixed-reality/mrtk-unity/updates-deployment/updating?view=mrtkunity-2021-05) to update the MRTK components. Otherwise, continue to the next step.
-1. Download the latest version of the MRTK MAgic Leap package from the [releases section](https://github.com/magicleap/MRTK-MagicLeap/releases) on the GitHub page.
-1. Import the newly downloaded package into your Unity project.  
+1. If you are upgrading to a newer version of both MRTK and the MRTK Magic Leap, follow Microsoft's [MRTK Upgrade Guide](https://docs.microsoft.com/en-us/windows/mixed-reality/mrtk-unity/updates-deployment/updating?view=mrtkunity-2021-05) to update the MRTK components. Otherwise, continue to the next step.
+1. Download and install the MRTK Magic Leap package by following the [Install MRTK Magic Leap](#install-mrtk-magic-leap) instructions.  
 
 # Notes
 
-#### Spatial Awareness
+## Spatial Awareness
 - Magic Leap's specific mesh features such as Vertex Confidence and Planarization can be enabled in the inspector when selecting the Magic Leap's SpatialAwarenessMeshOberverProfile.
 - The MRTK spatial mesh shaders require **Force Multipass** to be enabled. This can be done in Project Settings > Magic Leap Settings.
 - Meshing Settings can be changed at runtime using Magic Leap's MeshingSettings API.
 - Scene Understanding and Plane Finding are not supported.
 
-#### Input
+## Input
 - To ignore specific Controllers or Hands, edit the `_CurrentHandSettings` and `_CurrentControllerSettings` values before building in the `MagicLeapDeviceManager.cs` script. Run-time settings changes are not yet implemented.
 - You can use the `Trigger`, `Bumper`, and `HomeTap` as digital inputs. However,  no response is provided for `HomeTap down`. Instead, `HomeTap down` and `HomeTap up` are both executed simultaneously on `HomeTap up`. This is due to it being a system-level button.
 - You can also use the *Touchpad Touch*, *Touchpad Press*, and *Touchpad position* as input.
 
-#### Limitations
+## Limitations
 - This package is experimental and subject to errors, use at your own risk. We recommend backing up your project before implementing.
 - The Hand Mesh feature is not fully implemented.
 - The System Keyboard is not currently integrated.
