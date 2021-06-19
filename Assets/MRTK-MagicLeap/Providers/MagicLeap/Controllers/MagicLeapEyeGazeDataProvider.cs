@@ -83,7 +83,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
 
         private Ray? oldGaze;
         private int confidenceOfSaccade = 0;
-        private int confidenceOfSaccadeThreshold = 6; // TODO(https://github.com/Microsoft/MixedRealityToolkit-Unity/issues/3767): This value should be adjusted based on the FPS of the ET system
+        private int confidenceOfSaccadeThreshold = 4; // TODO(https://github.com/Microsoft/MixedRealityToolkit-Unity/issues/3767): This value should be adjusted based on the FPS of the ET system
         private Ray saccade_initialGazePoint;
         private readonly List<Ray> saccade_newGazeCluster = new List<Ray>();
 
@@ -166,7 +166,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
                     Service?.EyeGazeProvider?.UpdateEyeTrackingStatus(this, true);
 
                     Vector3 worldPosition = CameraCache.Main.transform.position;
-                    Vector3 worldRotation = MixedRealityPlayspace.TransformDirection((MLEyes.FixationPoint - CameraCache.Main.transform.position).normalized);
+                    Vector3 worldRotation = MixedRealityPlayspace.TransformDirection((MLEyes.FixationPoint - worldPosition).normalized);
 
                     Ray newGaze = new Ray(worldPosition, worldRotation);
                     if (SmoothEyeTracking)
