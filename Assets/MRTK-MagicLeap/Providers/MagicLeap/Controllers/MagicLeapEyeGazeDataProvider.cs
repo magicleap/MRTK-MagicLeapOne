@@ -83,7 +83,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
 
         private Ray? oldGaze;
         private int confidenceOfSaccade = 0;
-        private int confidenceOfSaccadeThreshold = 4; // TODO(https://github.com/Microsoft/MixedRealityToolkit-Unity/issues/3767): This value should be adjusted based on the FPS of the ET system
+        private int confidenceOfSaccadeThreshold = 4;
         private Ray saccade_initialGazePoint;
         private readonly List<Ray> saccade_newGazeCluster = new List<Ray>();
 
@@ -144,20 +144,14 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
                     {
                         eyeTrackingDevice = InputDeviceList[0];
                     }
-                    
 
                     if (!eyeTrackingDevice.isValid)
                     {
                         Service?.EyeGazeProvider?.UpdateEyeTrackingStatus(this, false);
                         return;
                     }
-                    else
-                    {
-                        Debug.Log("Eye Calibration status: " + MLEyes.CalibrationStatus +
-                                  ". This value may be incorrect when using Zero Iteration.");
-                    }
-
-
+                    Debug.Log("Eye Calibration status: " + MLEyes.CalibrationStatus +
+                              ". This value may be incorrect when using Zero Iteration.");
                 }
 
                 if (MLEyes.IsStarted
@@ -263,7 +257,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             }
         }
 
-        private static readonly ProfilerMarker IsSaccadingPerfMarker = new ProfilerMarker("[MRTK] BaseWindowsMixedRealityEyeGazeDataProvider.IsSaccading");
+        private static readonly ProfilerMarker IsSaccadingPerfMarker = new ProfilerMarker("[MRTK] MagicLeapEyeGazeDataProvider.IsSaccading");
 
         private bool IsSaccading(Ray rayOld, Ray rayNew)
         {
