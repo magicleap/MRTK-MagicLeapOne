@@ -158,29 +158,29 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
         public void Update()
         {
             //update keypoints and fingers:
-            WristCenter.Update(_managedHand, _managedHand.Hand.Wrist.Center.Position, _managedHand.Hand.Center);
+            WristCenter.Update(_managedHand, _managedHand.Hand.Wrist.Center.Position, _managedHand.Skeleton.HandCenter.positionFiltered);
             HandCenter.Update(_managedHand, _managedHand.Hand.Center);
-            _thumbMCP.Update(_managedHand, _managedHand.Hand.Thumb.MCP.Position, _managedHand.Hand.Index.MCP.Position, _managedHand.Hand.Center);
-            _thumbPIP.Update(_managedHand, _managedHand.Hand.Thumb.IP.Position, _managedHand.Hand.Thumb.MCP.Position, _managedHand.Hand.Center);
-            _thumbTip.Update(_managedHand, _managedHand.Hand.Thumb.Tip.Position, _managedHand.Hand.Thumb.IP.Position, _managedHand.Hand.Middle.Tip.Position, _managedHand.Hand.Thumb.MCP.Position, _managedHand.Hand.Center);
+            _thumbMCP.Update(_managedHand, _managedHand.Hand.Thumb.MCP.Position, _managedHand.Skeleton.Index.Knuckle.positionFiltered, _managedHand.Skeleton.HandCenter.positionFiltered);
+            _thumbPIP.Update(_managedHand, _managedHand.Hand.Thumb.IP.Position, _managedHand.Skeleton.Thumb.Knuckle.positionFiltered, _managedHand.Skeleton.HandCenter.positionFiltered);
+            _thumbTip.Update(_managedHand, _managedHand.Hand.Thumb.Tip.Position, _managedHand.Skeleton.Thumb.Joint.positionFiltered, _managedHand.Skeleton.Middle.Tip.positionFiltered, _managedHand.Skeleton.Thumb.Knuckle.positionFiltered, _managedHand.Skeleton.HandCenter.positionFiltered);
             Thumb.Update();
 
-            _indexMCP.Update(_managedHand, _managedHand.Hand.Index.MCP.Position, _managedHand.Hand.Center);
-            _indexPIP.Update(_managedHand, _managedHand.Hand.Index.PIP.Position, _managedHand.Hand.Index.MCP.Position, _managedHand.Hand.Center);
-            _indexTip.Update(_managedHand, _managedHand.Hand.Index.Tip.Position, _managedHand.Hand.Index.PIP.Position, _managedHand.Hand.Index.MCP.Position, _managedHand.Hand.Center, _managedHand.Hand.Thumb.IP.Position, _managedHand.Hand.Middle.Tip.Position);
+            _indexMCP.Update(_managedHand, _managedHand.Hand.Index.MCP.Position,  _managedHand.Skeleton.HandCenter.positionFiltered);
+            _indexPIP.Update(_managedHand, _managedHand.Hand.Index.PIP.Position, _managedHand.Skeleton.Index.Knuckle.positionFiltered, _managedHand.Skeleton.HandCenter.positionFiltered);
+            _indexTip.Update(_managedHand, _managedHand.Hand.Index.Tip.Position, _managedHand.Skeleton.Index.Joint.positionFiltered, _managedHand.Skeleton.Index.Knuckle.positionFiltered, _managedHand.Skeleton.HandCenter.positionFiltered, _managedHand.Skeleton.Thumb.Joint.positionFiltered, _managedHand.Skeleton.Middle.Tip.positionFiltered);
             Index.Update();
 
-            _middleMCP.Update(_managedHand, _managedHand.Hand.Middle.MCP.Position, _managedHand.Hand.Center);
-            _middlePIP.Update(_managedHand, _managedHand.Hand.Middle.PIP.Position, _managedHand.Hand.Middle.MCP.Position, _managedHand.Hand.Center);
-            _middleTip.Update(_managedHand, _managedHand.Hand.Middle.Tip.Position, _managedHand.Hand.Middle.PIP.Position, _managedHand.Hand.Middle.MCP.Position, _managedHand.Hand.Ring.Tip.Position, _managedHand.Hand.Center);
+            _middleMCP.Update(_managedHand, _managedHand.Hand.Middle.MCP.Position, _managedHand.Skeleton.HandCenter.positionFiltered);
+            _middlePIP.Update(_managedHand, _managedHand.Hand.Middle.PIP.Position, _managedHand.Skeleton.Middle.Knuckle.positionFiltered, _managedHand.Skeleton.HandCenter.positionFiltered);
+            _middleTip.Update(_managedHand, _managedHand.Hand.Middle.Tip.Position, _managedHand.Skeleton.Middle.Joint.positionFiltered, _managedHand.Skeleton.Middle.Knuckle.positionFiltered, _managedHand.Skeleton.Ring.Tip.positionFiltered, _managedHand.Skeleton.HandCenter.positionFiltered);
             Middle.Update();
 
-            _ringMCP.Update(_managedHand, _managedHand.Hand.Ring.MCP.Position, _managedHand.Hand.Center);
-            _ringTip.Update(_managedHand, _managedHand.Hand.Ring.Tip.Position, _managedHand.Hand.Ring.MCP.Position, _managedHand.Hand.Pinky.Tip.Position, _managedHand.Hand.Middle.Tip.Position, _managedHand.Hand.Center);
+            _ringMCP.Update(_managedHand, _managedHand.Hand.Ring.MCP.Position,  _managedHand.Skeleton.HandCenter.positionFiltered);
+            _ringTip.Update(_managedHand, _managedHand.Hand.Ring.Tip.Position, _managedHand.Skeleton.Ring.Knuckle.positionFiltered, _managedHand.Skeleton.Pinky.Tip.positionFiltered, _managedHand.Skeleton.Middle.Tip.positionFiltered, _managedHand.Skeleton.HandCenter.positionFiltered);
             Ring.Update();
 
-            _pinkyMCP.Update(_managedHand, _managedHand.Hand.Pinky.MCP.Position, _managedHand.Hand.Center);
-            _pinkyTip.Update(_managedHand, _managedHand.Hand.Pinky.Tip.Position, _managedHand.Hand.Pinky.MCP.Position, _managedHand.Hand.Ring.Tip.Position, _managedHand.Hand.Center);
+            _pinkyMCP.Update(_managedHand, _managedHand.Hand.Pinky.MCP.Position,  _managedHand.Skeleton.HandCenter.positionFiltered);
+            _pinkyTip.Update(_managedHand, _managedHand.Hand.Pinky.Tip.Position, _managedHand.Skeleton.Pinky.Knuckle.positionFiltered, _managedHand.Skeleton.Ring.Tip.positionFiltered, _managedHand.Skeleton.HandCenter.positionFiltered);
             Pinky.Update();
 
             //we need a hand to continue:
@@ -425,6 +425,10 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
             {
                 for (int i = 0; i < Fingers[f].points.Length - 1; i++)
                 {
+                    bool isRotationValid = Fingers[f].points[i + 1].Visible == true && Fingers[f].points[i].Visible == true;
+                    if(!isRotationValid)
+                        return;
+                    
                     forward = Fingers[f].points[i + 1].positionFiltered - Fingers[f].points[i].positionFiltered;
 
                     if (f == 0)
@@ -443,7 +447,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
                 }
 
                 int last = Fingers[f].points.Length - 1;
-                Fingers[f].points[last].Rotation = Fingers[f].points[last - 1].Rotation;
+                Fingers[f].points[last].UpdateRotation(Fingers[f].points[last - 1].Rotation);
             }
         }
 #endif
