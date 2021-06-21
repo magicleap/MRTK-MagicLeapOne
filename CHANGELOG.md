@@ -1,4 +1,9 @@
 # Changelog
+## [1.3.1] - 2021-06-21
+
+## Bug Fixes
+- Fix bug where hands become unstable after bringing them into the camera's clipping plane.
+
 ## [1.3.0] - 2021-06-17
 
 ## New Features
