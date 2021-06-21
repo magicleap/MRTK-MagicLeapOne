@@ -134,7 +134,6 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
                 currentPointerPose = jointPoses[TrackedHandJoint.Palm];
 
                 currentIndexPose = jointPoses[TrackedHandJoint.IndexTip];
-
                 
                 //The pinch pose is lost if the hand joints are not visible because they are in the camera's clip plane.
                 //The clip plane value is set to the default Magic Leap clip plane to insure a valid hand pose.
@@ -223,8 +222,8 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
             //source locations:
             Vector3 flatForward = Vector3.ProjectOnPlane(camera.forward, Vector3.up);
             Vector3 shoulder = TransformUtilities.WorldPosition(camera.position, Quaternion.LookRotation(flatForward), new Vector2(shoulderDistance, Mathf.Abs(shoulderDistanceBelowHead) * -1));
-
-            Vector3 pointerOrigin = Vector3.Lerp(hand.Thumb.Knuckle.positionFiltered, hand.Position, .5f);
+            
+            Vector3 pointerOrigin = Vector3.Lerp(hand.Thumb.Knuckle._lastValidPosition, hand.HandCenter._lastValidPosition, .5f);
             
             //direction:
             Quaternion orientation = Quaternion.LookRotation(Vector3.Normalize(pointerOrigin - shoulder), hand.Rotation * Vector3.up);
