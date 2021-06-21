@@ -96,13 +96,14 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
         private Progress _progress;
         private float _stability;
         private float _minHeadDistance = 0.254f;
-        private float _lostKeyPointDistance = 0.00762f;
-        private float _foundKeyPointDistance = 0.01905f;
+        private float _lostKeyPointDistance = 0.00462f;
         private float _maxDistance = 0.0254f;
         private float _smoothTime = .1f;
         private Camera _mainCamera;
         private float _visibleStableTimeout = .25f;
         private float _visibleStableFoundTime;
+        public Vector3 _lastValidPosition;
+        public float _rotationalVelocity;
 
         //Constructors:
         public ManagedKeypoint()
@@ -140,6 +141,11 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
                 return;
             }
 
+            if (Visible)
+            {
+                _lastValidPosition = positionFiltered;
+            }
+            
             //visibility status:
             bool currentVisibility = true;
 
@@ -147,34 +153,51 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
             if (Vector3.Distance(keyPointLocation, _mainCamera.transform.position) < _minHeadDistance)
             {
                 currentVisibility = false;
+                
+                if (decayPoints.Length > 0)
+                {
+                    keyPointLocation= decayPoints[0];
+                    positionFiltered = positionRaw = keyPointLocation;
+                }
             }
             else
             {
-                for (int i = 0; i < decayPoints.Length; i++)
-                {
-                    if (Vector3.Distance(keyPointLocation, decayPoints[i]) < _lostKeyPointDistance)
-                    {
+                 if (decayPoints.Length>0 && Vector3.Distance(keyPointLocation, managedHand.Hand.Center) < _lostKeyPointDistance)
+                 {
                         currentVisibility = false;
-                        keyPointLocation=  positionRaw = positionFiltered = decayPoints[0];
-                        break;
-                    }
-                }
+                        keyPointLocation= decayPoints[0];
+                        positionFiltered = positionRaw = keyPointLocation;
+                 }
+                    
             }
 
-            positionRaw = keyPointLocation;
 
             //lost visibility:
-            if (!currentVisibility && Visible)
+            if (!currentVisibility)
             {
-                FireLostEvent();
-                _progress.locationHistory.Clear();
+                if (Visible)
+                {
+                    FireLostEvent();
+                    _progress.locationHistory.Clear();
+                }
+                
                 return;
             }
-
+            
+            
+            //gained visibility:
+            if (currentVisibility && !Visible)
+            {
+                FireFoundEvent();
+                _progress.locationHistory.Clear();
+            }
+            
+            positionRaw = keyPointLocation;
+         
             //history cache:
             _progress.locationHistory.Add(keyPointLocation);
 
-            //only need 3 in our history:
+            //only need 6 in our history:
             if (_progress.locationHistory.Count > 6)
             {
                 _progress.locationHistory.RemoveAt(0);
@@ -210,25 +233,22 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
             {
                 positionFiltered = keyPointLocation;
             }
+        }
 
-
-            //gained visibility:
-            if (currentVisibility && !Visible)
+        public void UpdateRotation(Quaternion targetRotation)
+        {
+            if (Stability == 0)
             {
-                //we must also break distance for point proximity:
-                for (int i = 0; i < decayPoints.Length; i++)
+                Rotation = targetRotation;
+            }
+            else
+            {
+                float delta = Quaternion.Angle(Rotation, targetRotation);
+                if (delta > 0f)
                 {
-                    if (Vector3.Distance(keyPointLocation, decayPoints[i]) < _foundKeyPointDistance)
-                    {
-                        currentVisibility = false;
-                        break;
-                    }
-                }
-
-                //still good?
-                if (currentVisibility)
-                {
-                    FireFoundEvent();
+                    float t = Mathf.SmoothDampAngle(delta, 0.0f, ref _rotationalVelocity, _smoothTime * Stability);
+                    t = 1.0f - (t / delta);
+                    Rotation = Quaternion.Slerp(Rotation, targetRotation, t);
                 }
             }
         }
