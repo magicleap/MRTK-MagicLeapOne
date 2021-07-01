@@ -31,16 +31,17 @@
 //
 
 using System.Collections.Generic;
-using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using UnityEngine;
-using UnityEngine.XR.MagicLeap;
 
 using MagicLeap.MRTK.DeviceManagement.Input.Hands;
 
 namespace MagicLeap.MRTK.DeviceManagement.Input
 {
+    // Added inside of the scope to prevent conflicts with Unity's 2020.3 Version Control package.
+    using Microsoft.MixedReality.Toolkit;
+    
     [MixedRealityController(SupportedControllerType.ArticulatedHand,
         new[] { Handedness.Left, Handedness.Right },
         flags: MixedRealityControllerConfigurationFlags.UseCustomInteractionMappings)]
@@ -134,6 +135,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
                 currentPointerPose = jointPoses[TrackedHandJoint.Palm];
 
                 currentIndexPose = jointPoses[TrackedHandJoint.IndexTip];
+
                 
                 //The pinch pose is lost if the hand joints are not visible because they are in the camera's clip plane.
                 //The clip plane value is set to the default Magic Leap clip plane to insure a valid hand pose.
