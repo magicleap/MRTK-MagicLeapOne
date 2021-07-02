@@ -36,10 +36,7 @@ using System.Linq;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
-using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.XRSDK.Input;
-
-
 using MagicLeap.MRTK.DeviceManagement.Input.Hands;
 using Microsoft.MixedReality.Toolkit.XRSDK;
 using UnityEngine.XR.MagicLeap;
@@ -47,6 +44,9 @@ using UnityEngine.XR.Management;
 
 namespace MagicLeap.MRTK.DeviceManagement.Input
 {
+    // Added inside of the scope to prevent conflicts with Unity's 2020.3 Version Control package.
+    using Microsoft.MixedReality.Toolkit;
+
     /// <summary>
     /// Manages Magic Leap Device
     /// </summary>
