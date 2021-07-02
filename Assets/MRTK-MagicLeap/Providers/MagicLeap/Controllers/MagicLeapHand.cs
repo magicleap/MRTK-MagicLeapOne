@@ -135,7 +135,6 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
                 currentPointerPose = jointPoses[TrackedHandJoint.Palm];
 
                 currentIndexPose = jointPoses[TrackedHandJoint.IndexTip];
-
                 
                 //The pinch pose is lost if the hand joints are not visible because they are in the camera's clip plane.
                 //The clip plane value is set to the default Magic Leap clip plane to insure a valid hand pose.
