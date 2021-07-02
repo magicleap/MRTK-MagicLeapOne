@@ -1,5 +1,5 @@
 # Changelog
-## [1.3.1] - 2021-07-01
+## [1.3.2] - 2021-07-01
 
 ## Bug Fixes
 - Fix Unity 2020.3 compatibility
