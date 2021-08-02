@@ -1,8 +1,8 @@
-# MRTK 2.7 Integration Guide for Unity 2020.2.x / MLSDK 0.25.0
-### Last Updated: 6/17/2021  
+# MRTK 2.7 Integration Guide for Unity 2020.3.x / MLSDK 0.26.0
+### Last Updated: 7/2/2021  
 
 ## Overview 
-[MRTK-MagicLeap](https://github.com/magicleap/MRTK-MagicLeap) is an extension to Microsoft's open source Mixed Reality Toolkit ([MRTK](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/mrtk-getting-started "Microsoft MRTK documentation ")) for Unity. It adds compatibility for the Magic Leap platform, including head and hand tracking, and controller support. Using this plug-in, applications built using MRTK will be able to add support for Magic Leap devices. Some features such as native keyboard support are not yet implemented. 
+[MRTK-MagicLeap](https://github.com/magicleap/MRTK-MagicLeap) is an extension to Microsoft's open source Mixed Reality Toolkit ([MRTK](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/mrtk-getting-started "Microsoft MRTK documentation")) for Unity. It adds compatibility for the Magic Leap platform, including head and hand tracking, and controller support. Using this plug-in, applications built using MRTK will be able to add support for Magic Leap devices. Some features such as native keyboard support are not yet implemented. View the [notes](#notes) for development tips and information about limitations.
 
 ## In this Article
 - [Features](#features)
@@ -10,6 +10,9 @@
 - [Examples and Scene Settings](#examples-and-scene-settings)
 - [Build Your Application](#build-your-application)
 - [Notes](#notes)
+
+# Prerequisites
+- [Magic Leap Unity SDK](https://developer.magicleap.com/en-us/learn/guides/import-the-magic-leap-unity-package)
 
 # Features
 This following MRTK Features are supported in the latest release. 
@@ -45,17 +48,7 @@ Configure Unity's XR plug-in framework to integrate Magic Leap into Unity’s en
 1. Locate the **Magic Leap XR Plugin**, select the arrow to expand the package options then **See other versions**. Select version **6.2.2** and click **Install**.
 1. After the package is installed, open the **XR Plugin Management** settings **File > Build Settings > Player Settings > XR Plug-in Management** and enable **Magic Leap** as a Plug-in Provider on the **Lumin** Platform.  
 
-## Install the Package Dependencies 
-Before importing MRTK Magic Leap, install the package's dependencies - The Magic Leap SDK, MRTK Foundations, MRTK Examples, and Text Mesh Pro. 
-#### Magic Leap Unity SDK
-
-1. From the menu, go to **Assets > Import Package > Custom Package**.
-1. Find and Open the **Magic Leap Unity Package**. ex:  `C:/Users/YourUserName/MagicLeap/tools/unity/0.25.0/MagicLeap.unitypackage`
-1. In the **Import Unity Package** window, make sure everything is selected, click **Import**.  
-
-\* If you cannot locate the Magic Leap SDK Unity Package, make sure that you've installed the Unity bundle from [The Lab](https://developer.magicleap.com/downloads/lab). 
 #### Microsoft Mixed Reality Toolkit 2.7
-
 1. Download version 2.7.x of **MRTK Foundation** and **MRTK Examples** from the MRTK [GitHub](https://github.com/Microsoft/MixedRealityToolkit-Unity/releases).
 1. Import the **MRTK Foundation 2.7.x** package into your Unity project. Apply the recommended MRTK settings from the popup window that appears after doing so.
 1. Next, import the **MRTK Examples 2.7.x** package into your project.  
@@ -66,7 +59,7 @@ Before importing MRTK Magic Leap, install the package's dependencies - The Magic
 ## Install MRTK Magic Leap
 After all of the dependencies are installed, download and install the MRTK Magic Leap package.
 1. Download the latest version of the MRTK Magic Leap package from the [release sections](https://github.com/magicleap/MRTK-MagicLeap/releases) on the GitHub page.
-1. Import the [MRTK1.3-MagicLeap Unity Package](https://github.com/magicleap/MRTK-MagicLeap/releases/) by going to **Assets > Import Package > Custom Package**. Import all of its contents.
+1. Import the [MRTK MagicLeap Unity Package](https://github.com/magicleap/MRTK-MagicLeap/releases/) by going to **Assets > Import Package > Custom Package**. Import all of its contents.
 
 \* If you are upgrading from an previous version, follow the instructions provided in the [Upgrade Guide](#upgrade-guide).
 
@@ -126,6 +119,17 @@ If you are upgrading from a previous version of the MRTK Magic Leap Package foll
 1. Download and install the MRTK Magic Leap package by following the [Install MRTK Magic Leap](#install-mrtk-magic-leap) instructions.  
 
 # Notes
+## Development Tips 
+### Track Both Hands
+- To enable hand tracking on both hands programmatically, set the Magic Leap Device Manager's hand settings to `Both` by adding the following line to one of your script's `Start` method:
+```c#
+MagicLeapDeviceManager.Instance.CurrentHandSettings == MagicLeapDeviceManager.HandSettings.Both
+```
+### Set the Magic Leap controller ray to "Always On"
+- To prevent the controller's ray from being disabled when close to 3D objects, change the motion controller pointer behaviour to `AlwaysOn` by adding the following line to one of your script's `Start` method:
+```c#
+PointerUtils.SetMotionControllerRayPointerBehavior(PointerBehavior.AlwaysOn);
+```
 
 ## Spatial Awareness
 - Magic Leap's specific mesh features such as Vertex Confidence and Planarization can be enabled in the inspector when selecting the Magic Leap's SpatialAwarenessMeshOberverProfile.

@@ -34,7 +34,6 @@ using UnityEngine.XR.MagicLeap;
 
 namespace MagicLeap.MRTK.DeviceManagement.Input.Hands
 {
-
     public class ManagedHandSkeleton
     {
 #if PLATFORM_LUMIN

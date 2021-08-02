@@ -28,15 +28,12 @@
 // -------------------------------------------------------------------------------
 //
 
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit;
 using System;
 
-using UnityEngine.EventSystems;
 namespace MagicLeap.MRTK.DeviceManagement.Input.Voice
 {
     public class SpeechToMRTK : MonoBehaviour

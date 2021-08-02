@@ -69,3 +69,16 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+Assets/MixedRealityToolkit.Generated
+Assets/MRTK
+Assets/MagicLeap
+.idea
+MagicLeap.meta
+MixedRealityToolkit.Generated.meta
+MRTK.meta
+Assets/TextMesh Pro
+Assets/TextMesh Pro.meta
+Assets/Plugins
+Plugins.meta
+StreamingAssets.meta
+Assets/StreamingAssets

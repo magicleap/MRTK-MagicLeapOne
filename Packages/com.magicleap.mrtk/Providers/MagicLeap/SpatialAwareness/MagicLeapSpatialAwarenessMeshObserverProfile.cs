@@ -28,7 +28,6 @@
 // -------------------------------------------------------------------------------
 //
 
-using MagicLeap.MRTK.SpatialAwareness;
 using Microsoft.MixedReality.Toolkit;
 using Microsoft.MixedReality.Toolkit.SpatialAwareness;
 using Microsoft.MixedReality.Toolkit.Utilities;
