@@ -29,6 +29,7 @@
 //
 
 using UnityEngine;
+using UnityEngine.XR.MagicLeap;
 
 namespace MagicLeapTools.Voice
 {
@@ -100,11 +101,6 @@ namespace MagicLeapTools.Voice
         protected bool _canRecord = false;
         protected bool _isSetup = false;
 
-        #region Magic Leap Components
-        protected MicPrivilegeHandler _micPrivilegeHandler;
-        #endregion
-
-
         public virtual void ToggleActivelyRecording(bool enable) { }
 
         public virtual void SetupService(bool detectPhrases, bool autoDetectVoice) {
@@ -129,36 +125,20 @@ namespace MagicLeapTools.Voice
             SetupSingleton();
 
 #if PLATFORM_LUMIN && !UNITY_EDITOR
-            if (_micPrivilegeHandler == null)
+            _ = MLPrivileges.RequestPrivilegesAsync(MLPrivileges.Id.ComputerVision).ContinueWith((x) =>
             {
-                _micPrivilegeHandler = GetComponent<MicPrivilegeHandler>();
-            }
-
-            if (_micPrivilegeHandler == null)
-            {
-                Debug.LogError("Missing required component");
-                enabled = false;
-                return;
-            }
-
-            _micPrivilegeHandler.OnMicPrivilegeResult += HandleMicPrivilegeResult;
+                if (!x.Result.IsOk && x.Result != MLResult.Code.PrivilegeGranted)
+                {
+                    _canRecord = false;
+                    OnSpeechStateUpdated?.Invoke(SpeechToTextStates.MicrophoneUnavailable);
+                    return;
+                }
+                _canRecord = true;
+            });
 #else
             _canRecord = true;
 #endif
 
-        }
-
-        void HandleMicPrivilegeResult(bool canRecord)
-        {
-#if PLATFORM_LUMIN && !UNITY_EDITOR
-            _micPrivilegeHandler.OnMicPrivilegeResult -= HandleMicPrivilegeResult;
-            _canRecord = canRecord;
-#endif
-            if (!canRecord)
-            {
-                _canRecord = false;
-                OnSpeechStateUpdated?.Invoke(SpeechToTextStates.MicrophoneUnavailable);
-            }
         }
 
         protected virtual void SendToService() { }

@@ -41,6 +41,10 @@ using UnityEngine.XR.MagicLeap;
 
 namespace MagicLeap.MRTK.DeviceManagement.Input
 {
+    // Added inside of the scope to prevent conflicts with Unity's 2020.3 Version Control package.
+    using Microsoft.MixedReality.Toolkit;
+
+    
     [MixedRealityController(SupportedControllerType.GenericUnity,
         new[] { Handedness.Left, Handedness.Right })]
     public class MagicLeapMRTKController : BaseController, IMixedRealityHapticFeedback

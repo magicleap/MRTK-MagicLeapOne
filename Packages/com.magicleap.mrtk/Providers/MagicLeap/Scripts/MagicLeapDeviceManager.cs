@@ -44,6 +44,9 @@ using Microsoft.MixedReality.Toolkit;
 
 namespace MagicLeap.MRTK.DeviceManagement.Input
 {
+    // Added inside of the scope to prevent conflicts with Unity's 2020.3 Version Control package.
+    using Microsoft.MixedReality.Toolkit;
+
     /// <summary>
     /// Manages Magic Leap Device
     /// </summary>

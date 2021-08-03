@@ -39,6 +39,9 @@ using MagicLeap.MRTK.DeviceManagement.Input.Hands;
 
 namespace MagicLeap.MRTK.DeviceManagement.Input
 {
+    // Added inside of the scope to prevent conflicts with Unity's 2020.3 Version Control package.
+    using Microsoft.MixedReality.Toolkit;
+
     [MixedRealityController(SupportedControllerType.ArticulatedHand,
         new[] { Handedness.Left, Handedness.Right },
         flags: MixedRealityControllerConfigurationFlags.UseCustomInteractionMappings)]
