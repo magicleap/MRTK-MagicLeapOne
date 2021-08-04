@@ -28,7 +28,6 @@
 // -------------------------------------------------------------------------------
 //
 
-using UnityEngine;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit;
@@ -36,8 +35,10 @@ using System;
 
 namespace MagicLeap.MRTK.DeviceManagement.Input.Voice
 {
-    public class SpeechToMRTK : MonoBehaviour
-    {
+    [MixedRealityDataProvider(
+        typeof(IMixedRealityInputSystem),
+        SupportedPlatforms.Lumin,
+        "Magic Leap - Google Cloud Speech Input")]
         public class MagicLeapSpeechInputProvider : BaseInputDeviceManager, IMixedRealitySpeechSystem
         {
             public MagicLeapSpeechInputProvider(
@@ -50,7 +51,6 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Voice
             /// The keywords to be recognized and optional keyboard shortcuts.
             /// </summary>
             private SpeechCommands[] Commands => InputSystemProfile.SpeechCommandsProfile.SpeechCommands;
-
 
             /// <summary>
             /// The reference to the Magic Leap Speech System
@@ -145,5 +145,4 @@ namespace MagicLeap.MRTK.DeviceManagement.Input.Voice
                 return RecognitionConfidenceLevel.Unknown;
             }
         }
-    }
 }

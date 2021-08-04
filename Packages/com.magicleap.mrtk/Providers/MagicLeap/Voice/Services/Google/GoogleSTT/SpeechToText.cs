@@ -55,6 +55,7 @@ namespace MagicLeapTools.Voice
     public class SpeechToText : MonoBehaviour
     {
         #region Events
+
         public event TrackedPhraseFound OnTrackedPhraseFound;
         public event UntrackedPhraseFound OnUntrackedPhraseFound;
         public event StateUpdated OnSpeechStateUpdated;
@@ -79,9 +80,11 @@ namespace MagicLeapTools.Voice
         {
             OnTrackedPhraseFound?.Invoke(phraseIndex);
         }
+
         #endregion
 
         #region Serialized Fields
+
         [Header("Voice Input Settings")]
         [SerializeField, Tooltip("If true, voice input will be automatically detected, otherwise hold down bumper to speak and release bumper to send for conversion")]
         protected bool _autoDetectVoice = true;
@@ -91,6 +94,7 @@ namespace MagicLeapTools.Voice
         protected float _silenceTimer = 1.0f;
         [SerializeField, Tooltip("The minimum volume to detect voice input for"), Range(0.0f, 1.0f)]
         protected float _minimumSpeakingSampleValue = 0.05f;
+
         #endregion
 
         public static SpeechToText Instance;
@@ -103,7 +107,8 @@ namespace MagicLeapTools.Voice
 
         public virtual void ToggleActivelyRecording(bool enable) { }
 
-        public virtual void SetupService(bool detectPhrases, bool autoDetectVoice) {
+        public virtual void SetupService(bool detectPhrases, bool autoDetectVoice)
+        {
             _detectPhrases = detectPhrases;
             _autoDetectVoice = autoDetectVoice;
         }
@@ -140,6 +145,8 @@ namespace MagicLeapTools.Voice
 #endif
 
         }
+
+     
 
         protected virtual void SendToService() { }
     }

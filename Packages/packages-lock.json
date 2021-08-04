@@ -10,6 +10,14 @@
         "com.unity.textmeshpro": "3.0.1"
       }
     },
+    "com.magicleap.unitysdk": {
+      "version": "file:/Users/kbabilinski/MagicLeap/tools/unity/v0.26.0/com.magicleap.unitysdk",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.xr.magicleap": "6.2.2"
+      }
+    },
     "com.unity.collab-proxy": {
       "version": "1.5.7",
       "depth": 0,

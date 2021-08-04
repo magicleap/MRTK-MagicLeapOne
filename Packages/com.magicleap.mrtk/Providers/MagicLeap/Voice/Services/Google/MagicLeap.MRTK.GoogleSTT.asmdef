@@ -1,9 +1,10 @@
 {
-    "name": "MagicLeapTools.Voice",
+    "name": "MagicLeap.MRTK.GoogleSTT",
     "rootNamespace": "",
     "references": [
         "UnityEngine.XR.MagicLeap",
-        "LuminUnity"
+        "LuminUnity",
+        "Microsoft.MixedReality.Toolkit"
     ],
     "includePlatforms": [
         "Editor",

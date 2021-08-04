@@ -208,12 +208,15 @@ namespace MagicLeapTools.Voice
 
             if (enable)
             {
+                this.enabled = true;
                 StartMicrophoneCapture();
             }
             else
             {
                 StopMicrophoneCapture();
+                this.enabled = false;
             }
+           
         }
 
         private void StartMicrophoneCapture()
