@@ -28,12 +28,16 @@
 // -------------------------------------------------------------------------------
 //
 
+using MagicLeap.MRTK.DeviceManagement.Input;
 using UnityEngine;
 
 using Microsoft.MixedReality.Toolkit.UI;
 
-namespace MagicLeap.MRTK.DeviceManagement.Input
+namespace MagicLeap.MRTK.Samples
 {
+    // Added inside of the scope to prevent conflicts with Unity's 2020.3 Version Control package.
+    using Microsoft.MixedReality.Toolkit.Input;
+    
     [RequireComponent(typeof(Interactable))]
     public class ToggleReflectHandSetting : MonoBehaviour
     {
