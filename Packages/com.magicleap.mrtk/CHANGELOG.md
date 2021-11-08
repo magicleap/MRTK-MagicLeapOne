@@ -1,4 +1,10 @@
 # Changelog
+## [1.3.3] - 2021-11-12
+
+## Improvements
+- Update project to Unity Package format.
+
+# Changelog
 ## [1.3.2] - 2021-07-01
 
 ## Bug Fixes
