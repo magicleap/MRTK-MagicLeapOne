@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b71cb900fa9dec5488df2deb180db58f, type: 3}
+  m_Name: MagicLeap1 EyeTrackingDemo InputSystemProfile
+  m_EditorClassIdentifier: 
+  isCustomProfile: 1
+  dataProviderConfigurations:
+  - componentType:
+      reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapDeviceManager, MagicLeap.MRTK
+    componentName: Magic Leap Device Manager
+    priority: 0
+    runtimePlatform: 1104
+    deviceManagerProfile: {fileID: 0}
+  - componentType:
+      reference: Microsoft.MixedReality.Toolkit.Input.HandJointService, Microsoft.MixedReality.Toolkit
+    componentName: Hand Joint Service
+    priority: 0
+    runtimePlatform: -1
+    deviceManagerProfile: {fileID: 0}
+  - componentType:
+      reference: MagicLeap.MRTK.DeviceManagement.Input.Voice.SpeechToMRTK+MagicLeapSpeechInputProvider,
+        MagicLeap.MRTK
+    componentName: MagicLeapSpeechInputProvider
+    priority: 0
+    runtimePlatform: -1
+    deviceManagerProfile: {fileID: 0}
+  - componentType:
+      reference: Microsoft.MixedReality.Toolkit.Input.InputSimulationService, Microsoft.MixedReality.Toolkit.Services.InputSimulation
+    componentName: Input Simulation Service
+    priority: 0
+    runtimePlatform: 208
+    deviceManagerProfile: {fileID: 11400000, guid: 41478039094d47641bf4e09c20e61a5a, type: 2}
+  - componentType:
+      reference: MagicLeap.MRTK.DeviceManagement.Input.MagicLeapEyeGazeDataProvider,
+        MagicLeap.MRTK
+    componentName: Magic Leap Eye Gaze Provider
+    priority: 0
+    runtimePlatform: 1024
+    deviceManagerProfile: {fileID: 11400000, guid: 2d87dd11b18f700449c9dab320d19b99, type: 2}
+  focusProviderType:
+    reference: Microsoft.MixedReality.Toolkit.Input.FocusProvider, Microsoft.MixedReality.Toolkit.Services.InputSystem
+  raycastProviderType:
+    reference: Microsoft.MixedReality.Toolkit.Input.DefaultRaycastProvider, Microsoft.MixedReality.Toolkit.Services.InputSystem
+  focusQueryBufferSize: 128
+  shouldUseGraphicsRaycast: 1
+  focusIndividualCompoundCollider: 0
+  inputActionsProfile: {fileID: 11400000, guid: a239cfc11dc57484099abb298658d53e, type: 2}
+  inputActionRulesProfile: {fileID: 11400000, guid: 03945385d89102f41855bc8f5116b199, type: 2}
+  pointerProfile: {fileID: 11400000, guid: fa348bf44b661704fb20e5d975528e84, type: 2}
+  gesturesProfile: {fileID: 11400000, guid: bd7829a9b29409045a745b5a18299291, type: 2}
+  speechCommandsProfile: {fileID: 11400000, guid: c203354261484427a8c4bc55f5b6d29f, type: 2}
+  enableControllerMapping: 1
+  controllerMappingProfile: {fileID: 11400000, guid: 7a8eb5acb8a7843b99a33c1dcdc9d462, type: 2}
+  controllerVisualizationProfile: {fileID: 11400000, guid: f320ace73aba64f23b9b9dccdc67e450, type: 2}
+  handTrackingProfile: {fileID: 11400000, guid: ca92a8bd0fe8e43d6b0a9f8d4df285e2, type: 2}
