@@ -82,7 +82,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
         public override MixedRealityInteractionMapping[] DefaultLeftHandedInteractions => new[]
         {
             new MixedRealityInteractionMapping(0, "Spatial Pointer", AxisType.SixDof, DeviceInputType.SpatialPointer),
-            new MixedRealityInteractionMapping(1, "Select", AxisType.Digital, DeviceInputType.Select),
+            new MixedRealityInteractionMapping(1, "Select", AxisType.Digital, DeviceInputType.ButtonPress),
             new MixedRealityInteractionMapping(2, "Bumper Press", AxisType.Digital, DeviceInputType.ButtonPress),
             new MixedRealityInteractionMapping(3, "Home Press", AxisType.Digital, DeviceInputType.ButtonPress),
             new MixedRealityInteractionMapping(4, "Touchpad Touch", AxisType.Digital, DeviceInputType.ButtonPress),
@@ -93,7 +93,7 @@ namespace MagicLeap.MRTK.DeviceManagement.Input
         public override MixedRealityInteractionMapping[] DefaultRightHandedInteractions => new[]
         {
             new MixedRealityInteractionMapping(0, "Spatial Pointer", AxisType.SixDof, DeviceInputType.SpatialPointer),
-            new MixedRealityInteractionMapping(1, "Select", AxisType.Digital, DeviceInputType.Select),
+            new MixedRealityInteractionMapping(1, "Select", AxisType.Digital, DeviceInputType.ButtonPress),
             new MixedRealityInteractionMapping(2, "Bumper Press", AxisType.Digital, DeviceInputType.ButtonPress),
             new MixedRealityInteractionMapping(3, "Home Press", AxisType.Digital, DeviceInputType.ButtonPress),
             new MixedRealityInteractionMapping(4, "Touchpad Touch", AxisType.Digital, DeviceInputType.TouchpadTouch),
